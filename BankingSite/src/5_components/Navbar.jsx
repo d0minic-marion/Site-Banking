@@ -1,8 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../3_context/AuthContext.jsx";
 
 export default function Navbar() {
-  const { logout } = useAuth();
+  const { user, logout, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) return null;
+
+  if (!user) return null;
+
+  if (location.pathname === "/") return null;
 
   return (
     <nav className="navbar is-dark" role="navigation" aria-label="main navigation">

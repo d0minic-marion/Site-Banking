@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, googleProvider, githubProvider } from "../2_config/firebase.js";
 import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
@@ -15,6 +16,12 @@ export function AuthProvider({ children }) {
     });
     return () => unsub();
   }, []);
+
+  /* ---------------------------------------------------
+     Connexion via fournisseurs externes
+     Chaque fonction ouvre une fenêtre d’authentification
+     gérée par Firebase (OAuth)
+  --------------------------------------------------- */
 
   const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
   const loginWithGithub = () => signInWithPopup(auth, githubProvider);
