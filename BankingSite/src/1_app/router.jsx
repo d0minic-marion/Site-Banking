@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Home from "../4_pages/Home.jsx";
 import Login from "../4_pages/Login.jsx";
@@ -8,16 +8,22 @@ import Profile from "../4_pages/Profile.jsx";
 
 import ProtectedRoute from "../5_components/ProtectedRoute.jsx";
 import Navbar from "../5_components/Navbar.jsx";
+import Chatbot from "../5_components/Chatbot.jsx";
 import { useAuth } from "../3_context/AuthContext.jsx";
 
 function AppShell({ children }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) return null;
+
+  // Le chatbot s'affiche si l'utilisateur est connecté et n'est pas sur la page de profil
+  const showChatbot = user && location.pathname !== "/profile";
 
   return (
     <>
       {user ? <Navbar /> : null}
+      {showChatbot && <Chatbot />} 
       {children}
     </>
   );
