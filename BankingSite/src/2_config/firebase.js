@@ -24,6 +24,6 @@ export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
 
 export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider("6LeFmy4sAAAAANUz4X-rYe2HrSNNucCZqGLb-btw"),
+  provider: new ReCaptchaV3Provider("6LeYKS8sAAAAAGGnO_1rhrn2ErekcF2ZcybjV4a3"),
   isTokenAutoRefreshEnabled: true,
 });
