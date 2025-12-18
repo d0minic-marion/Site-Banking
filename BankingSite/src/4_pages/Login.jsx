@@ -8,27 +8,14 @@ import { appCheck } from "../2_config/firebase.js";
 import "../7_styles/Login.css";
 
 export default function Login() {
-
-  const { user, loading, loginWithGoogle, loginWithGithub } = useAuth();
-  // - loginWithGoogle / loginWithGithub : connexion via fournisseurs externes
+  const { loginWithGoogle, loginWithGithub } = useAuth();
   const navigate = useNavigate();
+
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [appCheckStatus, setAppCheckStatus] = useState(
-    "Vérification de sécurité…"
-  );
+  const [appCheckStatus, setAppCheckStatus] = useState("Vérification de sécurité…");
 
-  /* ---------------------------------------------------
-     Gestion de la session utilisateur
-     Si l’utilisateur est déjà connecté on le 
-     redirige automatiquement vers le dashboard
-  --------------------------------------------------- */
-  useEffect(() => {
-    if (!loading && user) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [loading, user, navigate]);
-
+  // ✅ Vérifie qu'App Check peut générer un token (reCAPTCHA v3)
   useEffect(() => {
     let mounted = true;
 
@@ -36,13 +23,11 @@ export default function Login() {
       try {
         const { token } = await getToken(appCheck, false);
         if (mounted) {
-          setAppCheckStatus(
-            token ? "Sécurité active (reCAPTCHA v3)" : "Sécurité active"
-          );
+          setAppCheckStatus(token ? "Sécurité active (reCAPTCHA v3)" : "Sécurité active");
         }
-      } catch {
+      } catch (e) {
         if (mounted) {
-          setAppCheckStatus("Sécurité active (reCAPTCHA v3)");
+          setAppCheckStatus("App Check non confirmé (dev)");
         }
       }
     })();
@@ -52,21 +37,13 @@ export default function Login() {
     };
   }, []);
 
-  /* ---------------------------------------------------
-     Fonction de connexion
-     - Reçoit la méthode de connexion (Google et GitHub)
-     - Lance l’authentification Firebase
-     - Redirige l’utilisateur si la connexion réussit
-  --------------------------------------------------- */
   const handleLogin = async (fn) => {
     setError("");
     setBusy(true);
-
     try {
       await fn();
-
       navigate("/dashboard", { replace: true });
-    } catch (e) {
+    } catch {
       setError("Connexion échouée. Réessaie.");
     } finally {
       setBusy(false);
@@ -82,12 +59,12 @@ export default function Login() {
           Choisis une méthode pour accéder à <strong>NovaBank</strong>.
         </p>
 
-        <div className="login-status"> <span className="login-badge">{appCheckStatus}</span> </div>
+        <div className="login-status">
+          <span className="login-badge">{appCheckStatus}</span>
+        </div>
 
-        {/* Affichage d’un message d’erreur si la connexion échoue */}
         {error && <div className="login-error">{error}</div>}
 
-        {/* Boutons de connexion avec fournisseurs externes */}
         <div className="login-buttons">
           <button
             className={`login-btn google ${busy ? "loading" : ""}`}
@@ -109,7 +86,7 @@ export default function Login() {
         </div>
 
         <p className="login-footnote">
-          Authentification via fournisseurs externes gérée par Firebase.
+          Sécurité: App Check + reCAPTCHA v3 (invisible) protège les appels vers Firebase.
         </p>
       </div>
     </div>
