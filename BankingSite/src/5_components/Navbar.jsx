@@ -22,9 +22,7 @@ export default function Navbar() {
       <div className="navbar-menu is-active">
         <div className="navbar-start">
           <NavLink to="/dashboard" className="navbar-item">Dashboard</NavLink>
-          <NavLink to="/accounts" className="navbar-item">Comptes</NavLink>
           <NavLink to="/transactions" className="navbar-item">Transactions</NavLink>
-          <NavLink to="/transfer" className="navbar-item">Virement</NavLink>
           <NavLink to="/profile" className="navbar-item">Profil</NavLink>
         </div>
 
