@@ -13,14 +13,12 @@ export default function Transactions() {
 
   const [items, setItems] = useState([]);
 
-  // Formulaire CREATE
   const [label, setLabel] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Épicerie");
   const [type, setType] = useState("expense");
   const [busy, setBusy] = useState(false);
 
-  // UPDATE
   const [editingId, setEditingId] = useState(null);
   const [editAmount, setEditAmount] = useState("");
 
@@ -35,7 +33,6 @@ export default function Transactions() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 
-  // CREATE
   const onCreate = async (e) => {
     e.preventDefault();
     if (!uid) return;
@@ -56,20 +53,17 @@ export default function Transactions() {
     }
   };
 
-  // DELETE
   const onDelete = async (id) => {
     if (!uid) return;
     await deleteTransaction(uid, id);
     await load();
   };
 
-  // UPDATE
   const startEdit = (tx) => {
     setEditingId(tx.id);
     setEditAmount(tx.amount ?? "");
   };
 
-  // UPDATE
   const saveEdit = async (id) => {
     if (!uid) return;
 
@@ -81,7 +75,6 @@ export default function Transactions() {
     await load();
   };
 
-  // Annuler édition
   const cancelEdit = () => {
     setEditingId(null);
     setEditAmount("");
@@ -91,7 +84,6 @@ export default function Transactions() {
     <div className="section">
       <h1 className="title">Transactions</h1>
 
-      {/* CREATE */}
       <form onSubmit={onCreate} className="box" style={{ maxWidth: 520 }}>
         <div className="field">
           <label className="label">Description</label>
@@ -156,7 +148,6 @@ export default function Transactions() {
         </button>
       </form>
 
-      {/* READ */}
       <div className="box">
         <h2 className="subtitle">Liste (READ)</h2>
 
@@ -181,7 +172,6 @@ export default function Transactions() {
                   <td>{t.category}</td>
                   <td>{t.type}</td>
 
-                  {/* UPDATE : édition du montant */}
                   <td style={{ width: 180 }}>
                     {editingId === t.id ? (
                       <input
@@ -196,7 +186,6 @@ export default function Transactions() {
                     )}
                   </td>
 
-                  {/* UPDATE + DELETE */}
                   <td className="has-text-right" style={{ width: 260 }}>
                     {editingId === t.id ? (
                       <>

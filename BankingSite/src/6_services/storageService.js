@@ -1,10 +1,6 @@
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { storage } from "../2_config/firebase.js";
 
-/**
- * Upload une photo de profil dans Storage et retourne l'URL publique.
- * Path: profilePictures/{uid}/avatar.{ext}
- */
 export async function uploadProfilePhoto(uid, file) {
   if (!uid) throw new Error("Missing uid");
   if (!file) throw new Error("Missing file");
@@ -14,17 +10,12 @@ export async function uploadProfilePhoto(uid, file) {
 
   const storageRef = ref(storage, `profilePictures/${uid}/avatar.${safeExt}`);
 
-  // Upload
   await uploadBytes(storageRef, file, { contentType: file.type || "image/jpeg" });
 
   const url = await getDownloadURL(storageRef);
   return url;
 }
 
-/**
- * Supprime la photo de profil dans Storage.
- * Essaye plusieurs extensions possibles.
- */
 export async function deleteProfilePhoto(uid) {
   if (!uid) throw new Error("Missing uid");
 

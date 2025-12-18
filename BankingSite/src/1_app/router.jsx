@@ -17,7 +17,6 @@ function AppShell({ children }) {
 
   if (loading) return null;
 
-  // Le chatbot s'affiche si l'utilisateur est connecté et n'est pas sur la page de profil
   const showChatbot = user && location.pathname !== "/profile";
 
   return (

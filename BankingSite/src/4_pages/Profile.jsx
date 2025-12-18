@@ -16,7 +16,6 @@ export default function Profile() {
 
   const userRef = useMemo(() => (uid ? doc(db, "users", uid) : null), [uid]);
 
-  // charger / créer le profil Firestore si pas encore présent
   useEffect(() => {
     let mounted = true;
 
@@ -48,7 +47,6 @@ export default function Profile() {
     user?.photoURL ||
     "https://dummyimage.com/96x96/1f2a3a/ffffff&text=N";
 
-  // upload avatar
   const onUpload = async () => {
     if (!uid || !file || !userRef) return;
 
@@ -57,13 +55,11 @@ export default function Profile() {
     try {
       const url = await uploadProfilePhoto(uid, file);
 
-      // sauvegarder l'URL dans Firestore
       await updateDoc(userRef, {
         photoURL: url,
         updatedAt: serverTimestamp(),
       });
 
-      // refresh local
       const snap = await getDoc(userRef);
       setProfile({ id: snap.id, ...snap.data() });
 
@@ -77,7 +73,6 @@ export default function Profile() {
     }
   };
 
-  // supprimer avatar
   const onDelete = async () => {
     if (!uid || !userRef) return;
 

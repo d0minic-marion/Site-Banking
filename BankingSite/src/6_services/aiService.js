@@ -20,7 +20,6 @@ export async function askChatbot(question, transactions, userId) {
 
     const { text, toolCall } = result.data;
 
-    // Si l'IA a décidé de créer une transaction via le toolCall
     if (toolCall && toolCall.name === "createTransaction") {
       const { label, amount, type, category } = toolCall.args;
       

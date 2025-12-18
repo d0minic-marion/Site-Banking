@@ -15,26 +15,23 @@ export default function Login() {
   const [error, setError] = useState("");
   const [appCheckStatus, setAppCheckStatus] = useState("Vérification de sécurité…");
 
-  // ✅ Vérifie qu'App Check peut générer un token (reCAPTCHA v3)
   useEffect(() => {
     let mounted = true;
 
     (async () => {
       try {
+        if (!appCheck) {
+          if (mounted) setAppCheckStatus("App Check indisponible");
+          return;
+        }
         const { token } = await getToken(appCheck, false);
-        if (mounted) {
-          setAppCheckStatus(token ? "Sécurité active (reCAPTCHA v3)" : "Sécurité active");
-        }
-      } catch (e) {
-        if (mounted) {
-          setAppCheckStatus("App Check non confirmé (dev)");
-        }
+        if (mounted) setAppCheckStatus(token ? "Sécurité active (reCAPTCHA v3)" : "Sécurité active");
+      } catch {
+        if (mounted) setAppCheckStatus("App Check non confirmé (dev)");
       }
     })();
 
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   const handleLogin = async (fn) => {

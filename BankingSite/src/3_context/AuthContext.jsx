@@ -17,12 +17,6 @@ export function AuthProvider({ children }) {
     return () => unsub();
   }, []);
 
-  /* ---------------------------------------------------
-     Connexion via fournisseurs externes
-     Chaque fonction ouvre une fenêtre d’authentification
-     gérée par Firebase (OAuth)
-  --------------------------------------------------- */
-
   const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
   const loginWithGithub = () => signInWithPopup(auth, githubProvider);
   const logout = () => signOut(auth);

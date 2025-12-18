@@ -3,11 +3,7 @@ import { useAuth } from "../3_context/AuthContext.jsx";
 import { getTransactions } from "../6_services/transactionService.js";
 import { askChatbot } from "../6_services/aiService.js";
 
-/*
-  Composant Chatbot
-  - Fournit un assistant IA intégré à l'application
-  - Permet de poser des questions liées aux finances
-*/
+
 export default function Chatbot() {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -22,23 +18,12 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
 
-  /* ---------------------------------------------------
-     Chargement des transactions utilisateur
-     - Appelé une seule fois après la connexion
-     - Les données servent de contexte à l'IA
-  --------------------------------------------------- */
   useEffect(() => {
     if (user?.uid) {
       getTransactions(user.uid).then(setTransactions);
     }
   }, [user]);
 
-  /* ---------------------------------------------------
-     Envoi d'un message à l'IA
-     - Ajoute le message utilisateur à l'interface
-     - Envoie la question + transactions à l'IA
-     - Ajoute la réponse de l'IA dans la conversation
-  --------------------------------------------------- */
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
@@ -48,25 +33,21 @@ export default function Chatbot() {
     setMessages(prev => [...prev, { role: "user", text: userMsg }]);
     setLoading(true);
 
-    // Appel au service IA avec le contexte financier
     const botResponse = await askChatbot(
       userMsg,
       transactions,
       user.uid
     );
 
-    // Ajout de la réponse de l'IA
     setMessages(prev => [...prev, { role: "bot", text: botResponse }]);
     setLoading(false);
   };
 
-  // Le chatbot n'est visible que si l'utilisateur est connecté
   if (!user) return null;
 
   return (
     <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
       
-      {/* Bouton flottant pour ouvrir le chatbot */}
       <button 
         className="button is-primary is-rounded is-large" 
         onClick={() => setIsOpen(!isOpen)}

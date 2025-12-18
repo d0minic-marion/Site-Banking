@@ -23,7 +23,14 @@ export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
 
-export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider("6LeYKS8sAAAAAGGnO_1rhrn2ErekcF2ZcybjV4a3"),
-  isTokenAutoRefreshEnabled: true,
-});
+export let appCheck = null;
+
+try {
+  appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider("TA_SITE_KEY_V3"),
+    isTokenAutoRefreshEnabled: true,
+  });
+} catch (e) {
+  console.warn("AppCheck init failed:", e);
+  appCheck = null;
+}
